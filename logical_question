@@ -1,0 +1,146 @@
+// NO. 1 Write a function in Dart that checks whether a given string is a palindrome or not
+
+bool isPalindrome(String input) {
+  // Remove anything from aplhabets or numbers
+  String newInput = input.replaceAll(RegExp(r'[^a-zA-Z0-9]'), '');
+
+  // Convert the input to lowercase
+  newInput = newInput.toLowerCase();
+
+  // Check if the newInput string is the same as its reverse
+  return newInput == newInput.split('').reversed.join('');
+}
+
+void main() {
+  String ex1 = "racecar";
+  String ex2 = "flutter";
+
+  print('$ex1 is a palindrome: ${isPalindrome(ex1)}');
+  print('$ex2 is a palindrome: ${isPalindrome(ex2)}');
+}
+
+//N0. 2 Implement a function that finds the largest and smallest number in an unsorted list of integers.
+
+List<int> getSmallAndLarge(List<int> number_) {
+
+  int smallest = number_[0];
+  int largest = number_[0];
+
+  for (int num in number_) {
+    if (num < smallest) {
+      smallest = num;
+    } else if (num > largest) {
+      largest = num;
+    }
+  }
+
+  return [smallest, largest];
+}
+
+void main() {
+  List<int> noList_ = [38, 12, 8, 89, 22, 9];
+  List<int> result = getSmallAndLarge(noList_);
+  int smallestNum = result[0];
+  int largestNum = result[1];
+
+  print("Smallest number is $smallestNum");
+  print("Largest number is $largestNum");
+}
+
+
+//NO.3 Given an array of integers, write a function that returns the second-largest number
+
+
+int getSecondLargest(List<int> number_) {
+  int largest = number_[0];
+  int secondLargest = number_[1];
+
+  for (int i = 2; i < number_.length; i++) {
+    if (number_[i] > largest) {
+      secondLargest = largest;
+      largest = number_[i];
+    } 
+    else if (number_[i] > secondLargest && number_[i] != largest) {
+      secondLargest = number_[i];
+    }
+  }
+
+  return secondLargest;
+}
+
+
+void main() {
+  List<int> noList_ = [38, 12, 8, 89, 22, 9];
+  int secondLargestNum = getSecondLargest(noList_);
+  print("Second largest number is $secondLargestNum");
+}
+
+
+//NO. 4 Create a function that determines if a given string is an anagram of another string.
+
+
+bool isAnagram(String str1, String str2) {
+
+  str1 = str1.replaceAll(' ', '').toLowerCase();
+  str2 = str2.replaceAll(' ', '').toLowerCase();
+
+  // is the lengths of the strings are equal
+  if (str1.length != str2.length) {
+    return false;
+  }
+
+  Map<String, int> characterFreq1 = {};
+  Map<String, int> characterFreq2 = {};
+
+  // Count the frequency of each character in the first string
+  for (int i = 0; i < str1.length; i++) {
+    String char = str1[i];
+    characterFreq1[char] = characterFreq1.containsKey(char) ? characterFreq1[char] + 1 : 1;
+  }
+
+  // Count the frequency of each character in the second string
+  for (int i = 0; i < str2.length; i++) {
+    String char = str2[i];
+    characterFreq2[char] = characterFreq2.containsKey(char) ? characterFreq2[char] + 1 : 1;
+  }
+
+  // compare frequency
+  return characterFreq1.toString() == characterFreq2.toString();
+}
+
+
+void main() {
+  print(isAnagram("heart", "earth"));       // Output: true
+  print(isAnagram("baby", "cake"));         // Output: false
+}
+
+
+
+// N0.5 Write a recursive function to calculate the nth Fibonacci number in Dart
+
+
+//Fn = Fn-1 + Fn-2 for every n > 1
+
+
+int fibonacci(int no) {
+  if (no == 0) {
+    return 0;
+  } else if (no == 1) {
+    return 1;
+  } else {
+    return fibonacci(no - 1) + fibonacci(no - 2);
+  }
+}
+
+void main() {
+  int no = 7;
+  int result = fibonacci(no);
+  print("The ${no}th Fibonacci number is $result"); //output = 13
+}
+
+
+
+
+
+
+
