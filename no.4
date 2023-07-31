@@ -1,0 +1,126 @@
+// NO. 4 Design a Flutter app that captures an image using the device's camera and displays it on the screen.
+
+
+import 'dart:io';
+
+import 'package:flutter/material.dart';
+import 'package:camera/camera.dart';
+import 'package:image_picker/image_picker.dart';
+import 'package:path/path.dart' as path;
+import 'package:path_provider/path_provider.dart';
+
+void main() async {
+  final cameras = await availableCameras();
+  final firstCamera = cameras.first;
+  runApp(ImageApp(camera: firstCamera));
+}
+
+class ImageApp extends StatelessWidget {
+  final CameraDescription camera;
+
+  ImageApp({required this.camera});
+
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Image Capture App',
+      home: ImageCaptureScreen(camera: camera),
+    );
+  }
+}
+
+class ImageScreen extends StatefulWidget {
+  final CameraDescription camera;
+
+  ImageScreen({required this.camera});
+
+  @override
+  _ImageScreenState createState() => _ImageScreenState();
+}
+
+class _ImageScreenState extends State<ImageScreen> {
+  late CameraController camCont;
+  late Future<void> _initializeControllerFuture;
+
+  @override
+  void initState() {
+    super.initState();
+    camCont = CameraController(
+      widget.camera,
+    );
+    _initializeControllerFuture = camCont.initialize();
+  }
+
+  @override
+  void dispose() {
+    camCont.dispose();
+    super.dispose();
+  }
+
+  Future<void> takePhoto() async {
+    try {
+      await _initializeControllerFuture;
+      final image = await camCont.takePicture();
+      final imagePath = image.path;
+      Navigator.push(
+        context,
+        MaterialPageRoute(
+          builder: (context) => DisplayMyImageScreen(imagePath: imagePath),
+        ),
+      );
+    } catch (e) {
+      print('Error capturing image: $e');
+    }
+  }
+
+  //this screen capture photos and show its preview
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Capture Image'),
+      ),
+      body: FutureBuilder<void>(
+        future: _initializeControllerFuture,
+        builder: (context, snapshot) {
+          if (snapshot.connectionState == ConnectionState.done) {
+            return CameraPreview(camCont);
+          } else {
+            return Center(child: CircularProgressIndicator());
+          }
+        },
+      ),
+      floatingActionButton: Column(
+        mainAxisAlignment: MainAxisAlignment.end,
+        children: [
+          GestureDetector(
+            onTap: (){
+              takePhoto();
+            },
+            child: Text("Take Photo"),
+          )
+        ],
+      ),
+    );
+  }
+}
+
+//this screen shows the image capture
+class DisplayMyImageScreen extends StatelessWidget {
+  final String imagePath;
+
+  DisplayMyImageScreen({required this.imagePath});
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Captured Image'),
+      ),
+      body: Center(
+        child: Image.file(File(imagePath)),
+      ),
+    );
+  }
+}
+
