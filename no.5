@@ -1,0 +1,93 @@
+// NO. 5 Develop a Flutter app that calculates and displays the factorial of a given number.
+
+//factorial formula  =>  n! = n × (n - 1) × (n - 2) × (n - 3) × ... × 1
+
+
+
+import 'package:flutter/material.dart';
+
+void main() async {
+  runApp(FactorialApp());
+}
+
+class FactorialApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'My Factorial Calculator',
+      home: MyFactorialAppScreen(),
+    );
+  }
+}
+
+class MyFactorialAppScreen extends StatefulWidget {
+  @override
+  _MyFactorialAppScreenState createState() => _MyFactorialAppScreenState();
+}
+
+class _MyFactorialAppScreenState extends State<MyFactorialAppScreen> {
+
+  int? input;
+  int? result;
+
+  void calcFactorial() {
+    if (input == null || input! < 0) {
+      setState(() {
+        result = null;
+      });
+      return;
+    }
+
+    int factorial = 1;
+    for (int i = 1; i <= input!; i++) {
+      factorial *= i;
+    }
+
+    setState(() {
+      result = factorial;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Factorial Calculator'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Column(
+          crossAxisAlignment: CrossAxisAlignment.stretch,
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            TextField(
+              keyboardType: TextInputType.number,
+              onChanged: (value) {
+                setState(() {
+                  input = int.tryParse(value);
+                });
+              },
+              decoration: InputDecoration(
+                labelText: 'Enter a number',
+                border: OutlineInputBorder(),
+              ),
+            ),
+            SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: calcFactorial,
+              child: Text('Calculate Factorial'),
+            ),
+            SizedBox(height: 20),
+            Text(
+              result == null
+                  ? 'Factorial Result: N/A'
+                  : 'Factorial Result: $result',
+              style: TextStyle(fontSize: 15),
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
+
