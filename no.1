@@ -1,0 +1,86 @@
+// NO.1 Write a Flutter program to create a basic login screen with input fields for username and password, along with a login button
+
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(WebViewV3Page());
+}
+
+class MyLoginPage extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: WebViewV3Page(),
+    );
+  }
+}
+
+class WebViewV3Page extends StatefulWidget {
+  @override
+  _WebViewV3PageState createState() => _WebViewV3PageState();
+}
+
+class _WebViewV3PageState extends State<WebViewV3Page> {
+  final formKey = GlobalKey<FormState>();
+  String name = '';
+  String password = '';
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Login Screen'),
+      ),
+      body: Padding(
+        padding: const EdgeInsets.all(20.0),
+        child: Form(
+          key: formKey,
+          child: Column(
+            mainAxisAlignment: MainAxisAlignment.center,
+            children: <Widget>[
+              TextFormField(
+                decoration: InputDecoration(labelText: 'Username'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your username';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  name = value!;
+                },
+              ),
+              SizedBox(height: 20),
+              TextFormField(
+                obscureText: true,
+                decoration: InputDecoration(labelText: 'Password'),
+                validator: (value) {
+                  if (value!.isEmpty) {
+                    return 'Please enter your password';
+                  }
+                  return null;
+                },
+                onSaved: (value) {
+                  password = value!;
+                },
+              ),
+              SizedBox(height: 20),
+              ElevatedButton(
+                onPressed: () {
+                  if (formKey.currentState!.validate()) {
+                    formKey.currentState!.save();
+                    //add api here to POST data to db
+                    print('Username: $name');
+                    print('Password: $password');
+                  }
+                },
+                child: Text('LOGIN'),
+              ),
+            ],
+          ),
+        ),
+      ),
+    );
+  }
+}
