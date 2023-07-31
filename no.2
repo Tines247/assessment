@@ -1,1 +1,75 @@
+// NO. 2 Create a Flutter app that fetches data from an API endpoint and displays it in a list view.
+
+
+//dev use http plugin for this programme
+
+import 'dart:convert';
+import 'package:flutter/material.dart';
+import 'package:http/http.dart' as http;
+
+void main() {
+  runApp(MyApp());
+}
+
+class MyApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      home: WebViewV3Page(),
+    );
+  }
+}
+
+class WebViewV3Page extends StatefulWidget {
+  @override
+  _WebViewV3PageState createState() => _WebViewV3PageState();
+}
+
+class _WebViewV3PageState extends State<WebViewV3Page> {
+  List<dynamic> MyData = [];
+
+  @override
+  void initState() {
+    super.initState();
+    fetchData();
+  }
+
+  Future<void> fetchData() async {
+    final response = await http.get(Uri.parse('https://jsonplaceholder.typicode.com/posts'));
+    if (response.statusCode == 200) {
+      //api callback is success
+      setState(() {
+        MyData = json.decode(response.body);
+      });
+    } else {
+      //api callback is fail
+      print('Error: ${response.statusCode}');
+    }
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Fetch Data'),
+      ),
+      body: MyData.isNotEmpty
+          ? ListView.builder(
+            itemCount: MyData.length,
+            itemBuilder: (context, index) {
+              final dataItem = MyData[index];
+              return ListTile(
+                title: Text(dataItem['title']),
+                subtitle: Text(dataItem['body']),
+              );
+            },
+          )
+          : 
+          //when data is loading
+          Center(
+            child: CircularProgressIndicator(),
+      ),
+    );
+  }
+}
 
