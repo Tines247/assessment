@@ -1,0 +1,73 @@
+// NO. 3 Implement a Flutter counter app that increments and decrements a number when corresponding buttons are pressed
+
+import 'package:flutter/material.dart';
+
+void main() {
+  runApp(CounterApp());
+}
+
+class CounterApp extends StatelessWidget {
+  @override
+  Widget build(BuildContext context) {
+    return MaterialApp(
+      title: 'Test My Counter',
+      home: WebViewV3Page(),
+    );
+  }
+}
+
+class WebViewV3Page extends StatefulWidget {
+  @override
+  _WebViewV3PageState createState() => _WebViewV3PageState();
+}
+
+class _WebViewV3PageState extends State<WebViewV3Page> {
+  int ctr = 0;
+
+  void increment() {
+    setState(() {
+      ctr++;
+    });
+  }
+
+  void decrement() {
+    setState(() {
+      ctr--;
+    });
+  }
+
+  @override
+  Widget build(BuildContext context) {
+    return Scaffold(
+      appBar: AppBar(
+        title: Text('Counter App'),
+      ),
+      body: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Text(
+              "${ctr}",
+              style: TextStyle(fontSize: 36),
+            ),
+            SizedBox(height: 20),
+            Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              children: [
+                ElevatedButton(
+                  onPressed: increment,
+                  child: Text('Increment'),
+                ),
+                SizedBox(width: 20),
+                ElevatedButton(
+                  onPressed: decrement,
+                  child: Text('Decrement'),
+                ),
+              ],
+            ),
+          ],
+        ),
+      ),
+    );
+  }
+}
